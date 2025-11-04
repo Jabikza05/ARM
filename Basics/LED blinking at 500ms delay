@@ -1,0 +1,28 @@
+#include <LPC21XX.H>
+void delayms(int ms)
+ {
+   unsigned int i;
+     for(;ms>0;ms--){
+         for(i=120000;i>0;i--);
+    }
+ }
+
+int main()
+{
+IODIR0=0X00000001;
+while(1)
+ {
+  IOCLR0=0X00000001;
+   delayms(50);
+	 IOSET0=0X00000001;
+   delayms(50);
+	 /*
+   IOSET0=0X00000001;
+   delayms(50);
+   IOCLR0=0X00000001;
+   delayms(50);
+   */
+  }
+}
+
+
