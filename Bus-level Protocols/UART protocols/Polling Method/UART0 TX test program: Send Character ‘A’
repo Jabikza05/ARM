@@ -1,0 +1,38 @@
+#include<lpc21xx.h>
+
+void uart0_config(void);
+void uart0_TX(unsigned char);
+
+int main()
+{ 
+   PINSEL0=0x05;
+   uart0_config();
+	 while(1)
+	{
+
+	uart0_TX('A');	
+  }
+}
+
+void uart0_config(void)
+{
+  PINSEL0=0x05;
+	U0LCR=0X83;
+	U0DLL=97;
+	U0DLM=0;
+	U0LCR=0X03;
+}
+
+
+void uart0_TX(unsigned char d)
+{
+  while(((U0LSR>>5)&1)==0);
+  U0THR=d;
+
+}
+
+
+	 uart0_int(temp);
+
+}
+
