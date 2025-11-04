@@ -1,0 +1,64 @@
+#include <lpc21xx.h>
+#include "delay_4_digit.h"
+
+#define seg_d 0xff
+
+#define seg_1 1<<8
+#define seg_2 1<<9
+#define seg_3 1<<10
+#define seg_4 1<<11
+ typedef unsigned char u8;
+ u8 seg_lut[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+ 
+ void digit_display(int);
+ 
+ int main()
+ {
+   PINSEL0=0X00000000;
+	 IODIR0=seg_d|seg_1|seg_2|seg_3|seg_4;
+	 while(1)
+	 {
+     digit_display(1234);
+
+   }
+ }
+
+ void digit_display(int x)
+ {
+	 char k;
+	 for(k=0;k<100;k++)
+	 {
+   IOCLR0=seg_d;
+	 IOSET0=seg_lut[x/1000];
+	 IOSET0=seg_1;
+   delay_ms(5);
+	 IOCLR0=seg_1;
+		 
+	 IOCLR0=seg_d;
+	 IOSET0=seg_lut[(x/100)%10];
+	 IOSET0=seg_2;
+   delay_ms(5);
+	 IOCLR0=seg_2;
+		 
+		 
+		 
+	 IOCLR0=seg_d;
+	 IOSET0=seg_lut[(x/10)%10];
+	 IOSET0=seg_3;
+   delay_ms(5);
+	 IOCLR0=seg_3;
+		 
+		 
+		 
+	 IOCLR0=seg_d;
+	 IOSET0=seg_lut[x%10];
+	 IOSET0=seg_4;
+   delay_ms(5);
+	 IOCLR0=seg_4;
+
+  }
+}
+
+
+
+
