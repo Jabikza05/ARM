@@ -1,0 +1,42 @@
+#include<lpc21xx.h>
+#include "delay_seg.h"
+#define seg_d 0xff
+
+
+typedef unsigned char u8;
+
+u8 seg_lut[12]={0xC0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+
+int main()
+{
+    
+	u8 digit;
+	IODIR0=seg_d;
+	IOSET0=seg_d;
+	
+	while(1)
+	{
+  for(digit=0;digit<10;digit++)	
+ {
+   IOCLR0=seg_d;
+	 IOSET0=seg_lut[digit];
+	 delay_ms(500);
+	 
+ }
+  if(digit==9);
+	 IOSET0=seg_d;
+}
+}
+
+
+
+
+
+
+
+
+
+
+    
+
+
