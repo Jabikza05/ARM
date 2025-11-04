@@ -1,0 +1,52 @@
+#include <lpc21xx.h>
+#include "digit_delay.h"
+#define seg_d 0xff
+#define seg_1 1<<8
+#define seg_2 1<<9
+
+typedef unsigned char u8;
+
+u8 seg_lut[ ]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+
+void digit_display(int);
+
+int main()
+{ 
+	IODIR0=seg_d|seg_1|seg_2;
+  while(1) //infinite times 
+	{
+    digit_display(24);
+
+  }
+
+
+}
+
+
+
+void digit_display(int x)
+{
+ char i;
+	for(i=0;i<100;i++)
+	{                               
+        IOCLR0 = seg_d;                  // Clear all segment lines
+        IOSET0 = seg_lut[x / 10];        // Set segments for the tens digit
+        IOCLR0 = seg_1;                  // Enable the first digit (tens place)
+        delay_ms(50);                    // Small delay to make digit visible
+        IOSET0 = seg_1;                  // Disable the first digit
+
+        IOCLR0 = seg_d;                  // Clear all segment lines again
+        IOSET0 = seg_lut[x % 10];        // Set segments for the ones digit
+        IOCLR0 = seg_2;                  // Enable the second digit (ones place)
+        delay_ms(50);                    // Small delay for visibility
+        IOSET0 = seg_2;                  // Disable the second digit
+
+
+  }
+
+
+
+
+}
+
+
