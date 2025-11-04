@@ -1,0 +1,26 @@
+#include <lpc21xx.h>
+
+void FIQ_Handler_Intrpt(void)__irq
+{
+	EXTINT=1<<0; //0X01;
+  IOSET0=1<<17; 
+	IOCLR0=1<<17;
+	VICVectAddr=0;
+}
+
+
+int main()
+
+{
+  PINSEL1|=0X01; //enable P0.16 for EINT0
+  VICIntSelect=1<<14;
+	EXTMODE=0X00;
+	EXTPOLAR=0X00;
+	
+	VICIntEnable=1<<14;
+	 while(1);
+}
+
+
+
+
