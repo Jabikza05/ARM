@@ -10,7 +10,7 @@ void uart0_float(float);
 
 int main()
 {
-   PINSELO=0X05;
+  
    uart0_config();
 	 while(1)
 	{
