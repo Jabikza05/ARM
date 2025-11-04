@@ -5,7 +5,7 @@ void uart0_TX(unsigned char);
 
 int main()
 { 
-   PINSEL0=0x05;
+ 
    uart0_config();
 	 while(1)
 	{
