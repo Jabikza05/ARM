@@ -1,0 +1,89 @@
+#include <lpc21xx.h>
+
+#define led_1 1<<4
+#define led_2 1<<5
+#define led_3 1<<6
+#define led_4 1<<7
+
+#define Eint0_num 14
+#define Eint1_num 15
+#define Eint2_num 16
+#define Eint3_num 17
+
+
+
+void EXT_INT0_ISR(void)__irq
+{
+
+		if((VICIRQStatus>>14)&1)
+		{
+		EXTINT=0X01;
+		IOSET0=led_1;
+		IOCLR0=led_1;
+		VICVectAddr=0;
+		}
+
+		if((VICIRQStatus>>15)&1)
+		{
+		EXTINT=0X02;
+		IOSET0=led_2;
+		IOCLR0=led_2;
+		VICVectAddr=0;
+		}
+
+		if((VICIRQStatus>>16)&1)
+		{
+		EXTINT=0X04;
+		IOSET0=led_3;
+		IOCLR0=led_3;
+		VICVectAddr=0;
+		}
+
+		if((VICIRQStatus>>17)&1)
+		{
+		EXTINT=0X08;
+		IOSET0=led_4;
+		IOCLR0=led_4;
+		VICVectAddr=0;
+		}
+
+
+}
+
+
+unsigned int count=0;
+int main()
+{
+	
+
+ PINSEL1|=0X01|0x300;
+	PINSEL0|=0X80000000|0x20000000;
+	IODIR0=led_1|led_2|led_3|led_4;
+	
+	VICIntSelect=0;
+	 
+	VICDefVectAddr=(int)EXT_INT0_ISR;
+
+	/*******************falling  edge**********************/
+	EXTMODE=0XF;
+	EXTPOLAR=0X0;
+	
+	/*
+	EXTMODE=0X9;//EINT0 and EINT3 as edge 
+	EXTPOLAR=0X0; //EINT0 and EINT3 as raising 
+	
+	*/
+	VICIntEnable=(1<<Eint0_num)|(1<<Eint1_num)|(1<<Eint2_num)|(1<<Eint3_num);
+	
+	  while(1)
+		{
+
+       count++;
+    }
+
+}
+
+
+
+
+
