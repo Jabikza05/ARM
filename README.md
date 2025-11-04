@@ -1,1 +1,1 @@
-# “A hands-on journey through ARM: my experiments, projects.”
+# “A Hands-On Journey Through ARM7 with LPC2129”.”
