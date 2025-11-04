@@ -1,0 +1,89 @@
+#include<lpc21xx.h>
+
+void uart0_config(void);
+void uart0_TX(unsigned char);
+void uart0_str(unsigned char*);
+void uart0_int(int);
+void uart0_float(float);
+
+
+
+int main()
+{
+   PINSELO=0X05;
+   uart0_config();
+	 while(1)
+	{
+	//uart0_TX('A');
+  //uart0_str("Jabisha jaya swvan R");
+		//uart0_int(90);
+		uart0_float(2.78);
+		
+		
+  }
+}
+
+void uart0_config(void)
+{
+  PINSEL0=0x05;
+	U0LCR=0X83;
+	U0DLL=97;
+	U0DLM=0;
+	U0LCR=0X03;
+}
+
+
+void uart0_TX(unsigned char d)
+{
+  while(((U0LSR>>5)&1)==0);
+  U0THR=d;
+
+}
+
+void uart0_str(unsigned char*s)
+{
+  while(*s)
+	{
+     uart0_TX(*s++);
+  }
+
+
+}
+
+void uart0_int(int n)
+{
+  unsigned char a[5];
+	signed char i=0;
+	if (n==0)
+		uart0_TX('0');
+	
+	else
+	{
+		if(n<0)
+		{
+		uart0_TX('-');
+		n=-n;
+	  }
+
+	while(n>0)
+	{
+    a[i++]=n%10;
+     n=n/10;
+	}
+	for(--i;i>=0;i--)
+	uart0_TX(a[i]+48);
+
+}
+
+}
+void uart0_float(float f)
+{
+   int temp;
+	 temp=f;
+   uart0_int(temp);
+	 uart0_TX('.');
+	 temp=(f-temp)*100;
+	 uart0_int(temp);
+
+}
+
