@@ -1,0 +1,55 @@
+#include <lpc21xx.h>
+
+#define led_1 1<<16 //P0.16 
+#define led_2 1<<17 //P1.17
+
+#define sw 14 //P0.14 as switch 
+
+#define Timer0_INT_Slot_En 0x20
+#define Timer0_num 4
+
+int fl =0; //one varaible 
+void T0_Int_ISR(void)__irq
+{ //to toggle the led for every 500ms
+	T0IR=0x01; //to clear the MR0 flag
+   if(fl==0)
+	 {
+      IOSET1=led_2;
+		  fl=1;
+   }
+
+	 else
+	 {
+      IOCLR1=led_2;
+		  fl=0;
+   }
+ VICVectAddr=0;
+ 
+}
+
+int main()
+{
+  IODIR0|=led_1;
+	IODIR1|=led_2;
+	
+	T0MCR=0X03;// interrupt and reset the match register 0
+	T0MR0=7500000-1; // Pclk--> 1sec=15mzh in that half 500 ms so 7500000
+	VICIntSelect=0;
+	VICVectCntl0=Timer0_INT_Slot_En|Timer0_num;
+	VICVectAddr0=(int)T0_Int_ISR;
+	VICIntEnable=(1<<Timer0_num);
+
+	T0TCR=0x01; //start the timer
+ while(1)
+ {
+   if(((IOPIN0>>sw)&1)==0)
+	 
+     IOCLR0=led_1;
+	  else
+	    IOSET0=led_1;
+   
+ }
+
+}
+
+
