@@ -1,5 +1,5 @@
 #include <lpc21xx.h>
-#include "delay_4_digit.h"
+#include "delay_seg.h"
 
 #define seg_d 0xff
 
