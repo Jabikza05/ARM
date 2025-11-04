@@ -1,0 +1,93 @@
+#include <lpc21xx.h>
+#include "delay_float_digit.h"
+
+#define seg_d 0xff
+
+#define seg_1 1<<8
+#define seg_2 1<<9
+#define seg_3 1<<10
+#define seg_4 1<<11
+ typedef unsigned char u8;
+ u8 seg_lut[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+ 
+ void float_display(float);
+ u8 dp1=0xff,dp2=0xff,dp3=0xff,dp4=0xff;
+ 
+ void digit_display(int);
+ 
+ int main()
+ {
+   PINSEL0=0X00000000;
+	 IODIR0=seg_d|seg_1|seg_2|seg_3|seg_4;
+	 while(1)
+	 {
+     //float_display(2.4);
+		 //float_display(22.78);
+		 float_display(249.7);
+
+   }
+ }
+
+ void digit_display(int x)
+ {
+	 char k;
+	 for(k=0;k<100;k++)
+	 {
+   IOCLR0=seg_d;
+	 IOSET0=seg_lut[x/1000]&dp1;
+	 IOSET0=seg_1;
+   delay_ms(5);
+	 IOCLR0=seg_1;
+		 
+	 IOCLR0=seg_d;
+	 IOSET0=seg_lut[(x/100)%10]&dp2;
+	 IOSET0=seg_2;
+   delay_ms(5);
+	 IOCLR0=seg_2;
+		 
+		 
+	 
+	 IOCLR0=seg_d;
+	 IOSET0=seg_lut[(x/10)%10]&dp3;
+	 IOSET0=seg_3;
+   delay_ms(5);
+	 IOCLR0=seg_3;
+		 
+		 
+		 
+	 IOCLR0=seg_d;
+	 IOSET0=seg_lut[x%10]&dp4;
+	 IOSET0=seg_4;
+   delay_ms(5);
+	 IOCLR0=seg_4;
+
+  }
+	
+  }
+
+
+void float_display(float n)
+{
+    int temp = 0;
+
+    // Reset all decimal points
+    dp1 = dp2 = dp3 = dp4 = 0xff;
+
+    if (n >= 0.0 && n < 10.0)
+    {
+        dp1 = 0x7f;      // 0.x format (e.g., 2.5)
+        temp = n * 10;
+    }
+    else if (n >= 10.0 && n < 100.0)
+    {
+        dp2 = 0x7f;      // xx.xx format (your case: 22.78)
+        temp = n * 100;
+    }
+    else if (n >= 100.0 && n < 1000.0)
+    {
+        dp3 = 0x7f;      // xxx.x format (e.g., 123.4)
+        temp = n * 10;
+    }
+
+    digit_display(temp);
+}
